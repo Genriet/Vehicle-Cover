@@ -260,7 +260,27 @@ modded class CarScript
 	}
 #endif
 // Camonets themselves are client-only
-#ifndef SERVER 
+#ifndef SERVER
+	// Potentially should fix desync after restart
+	override void EEInit()
+	{
+		super.EEInit();
+
+		if (m_LocalHasCamonet != m_HasCamonet)
+		{
+			m_LocalHasCamonet = m_HasCamonet;
+			
+			if (m_LocalHasCamonet)
+			{
+				VC_SpawnCamonet();
+			}
+			else
+			{
+				VC_DeleteCamonet();
+			}
+		}
+	}
+
 	override void OnVariablesSynchronized()
 	{
 		super.OnVariablesSynchronized();
