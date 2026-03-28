@@ -37,16 +37,15 @@ modded class BoatScript
 		AddAction(ActionVC_CoverVehicle);
 	}
 
+#ifdef SERVER
 	override void EEInit()
 	{
 		super.EEInit();
-
-		if (GetGame().IsServer())
-		{
-			// May be redundant
-			SetSynchDirty();
-		}
+		
+		// May be redundant
+		SetSynchDirty();
 	}
+#endif
 
 	protected void VC_SetCamonetInfo()
 	{
@@ -218,6 +217,26 @@ modded class BoatScript
 
 	// Camonets themselves are client-only
 #ifndef SERVER 
+	// Potentially should fix desync after restart
+	override void EEInit()
+	{
+		super.EEInit();
+
+		if (m_LocalHasCamonet != m_HasCamonet)
+		{
+			m_LocalHasCamonet = m_HasCamonet;
+			
+			if (m_LocalHasCamonet)
+			{
+				VC_SpawnCamonet();
+			}
+			else
+			{
+				VC_DeleteCamonet();
+			}
+		}
+	}
+	
 	override void OnVariablesSynchronized()
 	{
 		super.OnVariablesSynchronized();

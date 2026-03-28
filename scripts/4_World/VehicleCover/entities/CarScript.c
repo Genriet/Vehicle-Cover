@@ -40,16 +40,15 @@ modded class CarScript
 		AddAction(ActionVC_CoverVehicle);
 	}
 
+#ifdef SERVER
 	override void EEInit()
 	{
 		super.EEInit();
 		
-		if (GetGame().IsServer())
-		{
-			// May be redundant
-			SetSynchDirty();
-		}
+		// May be redundant
+		SetSynchDirty();
 	}
+#endif
 
 	protected void VC_SetCamonetInfo()
 	{
